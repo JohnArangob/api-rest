@@ -62,7 +62,7 @@ func (s *store) GetByID(id int) (*model.Libro, error) {
 }
 
 func (s *store) Create(libro *model.Libro) (*model.Libro, error) {
-	q := `INSERT INTO TABLE books (title, author) VALUES (?, ?)`
+	q := `INSERT INTO books (title, author) VALUES (?, ?)`
 	resp, err := s.db.Exec(q, libro.Titulo, libro.Autor)
 	if err != nil {
 		return nil, err
@@ -80,18 +80,18 @@ func (s *store) Create(libro *model.Libro) (*model.Libro, error) {
 
 func (s *store) Update(id int, libro *model.Libro) (*model.Libro, error) {
 	q := `UPDATE books SET title = ?, author = ? WHERE id = ?`
-	_, err := s.db.Exec(q, libro.Titulo, libro.Autor, libro.ID)
+	_, err := s.db.Exec(q, libro.Titulo, libro.Autor, id)
 	if err != nil {
 		return nil, err
 	}
 
 	libro.ID = id
-	return nil, nil
+	return libro, nil
 }
 
 func (s *store) Delete(id int) error {
-	q := `DELETE from books WHERE if = ?`
-	_, err := s.db.Exec(q)
+	q := `DELETE from books WHERE id = ?`
+	_, err := s.db.Exec(q, id)
 
 	if err != nil {
 		return err
